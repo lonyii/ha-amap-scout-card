@@ -791,7 +791,7 @@ JS API：v2.0 · https://webapi.amap.com/maps
 ## 开发
 
 ```bash
-# 语法检查（CI 里跑的就是这一句）
+# 语法检查
 node --check amap-location-card.js
 ```
 
@@ -825,7 +825,7 @@ Windows 上直接 **双击 `push.cmd`** 也行（自动定位 Git Bash，跑完�
 `.cmd` 必须用 CRLF 换行，`.gitattributes` 已固定该规则，`push.sh` 每次运行也会自动纠正。
 
 发布白名单：`amap-location-card.js`、`ha-amap-scout.js`、`README.md`、`hacs.json`、`package.json`、
-`.gitignore`、`.github/`。`demo.html` 与测试脚本被 `.gitignore` 挡在仓库外
+`.gitignore`、`LICENSE`。`demo.html` 与测试脚本被 `.gitignore` 挡在仓库外
 （demo 内含本地 Key，绝不外发）。
 
 ### 目录结构
@@ -838,7 +838,7 @@ ha-amap-scout-card/           # GitHub 仓库（只含发布文件）
 ├── package.json
 ├── README.md
 ├── push.sh                   # 一键发布脚本
-└── .github/workflows/validate.yaml
+└── push.cmd                  # Windows 一键发布（双击运行）
 
 本地额外保留（不发布）：
 ├── demo.html                 # 可视化验收页（含预填 Key）
