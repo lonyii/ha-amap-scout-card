@@ -1900,11 +1900,20 @@ class AmapLocationCard extends HTMLElement {
     }
     this._notices.delete('loc');
     this._renderNotices();
-    const prevHeading = this._loc ? this._loc.heading : null;
+    const prev = this._loc;
+    const prevHeading = prev ? prev.heading : null;
     this._loc = res;
-    // 朝向变了要重画箭头 —— 但 _maybeUpdateMap 只比坐标，heading 单独处理。
-    // 阈值 1°：步行/开车时 heading 每秒抖好几次，没必要每次都重建 DOM。
-    if (this._gcj && headingChanged(prevHeading, res.heading)) this._renderPins();
+    // 位置与朝向必须同步落图：
+    // - 坐标没动（罗盘/停着的车只转朝向）：原地立即重画，位置本来就是最新的；
+    // - 坐标动了：箭头不要先转 —— 等坐标转换完成、标记移动的那次 _refresh 里
+    //   用同一份 _loc 把位置和朝向一起重画（_showSourceMarker 读的就是 _loc.heading），
+    //   避免「箭头先转、人还站在旧位置」的错位。
+    if (this._gcj && headingChanged(prevHeading, res.heading)) {
+      const moved = !prev
+        || prev.lat.toFixed(5) !== res.lat.toFixed(5)
+        || prev.lon.toFixed(5) !== res.lon.toFixed(5);
+      if (!moved) this._renderPins();
+    }
     this._renderStatus();
     this._maybeUpdateMap();
   }
